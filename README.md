@@ -1,9 +1,13 @@
 Simple go REST API app with Go and Redis
 
-To run the app in linux machine use bash comand:
+<b>Run the app on linux machine</b>
+Use bash comand:
 docker compose up
 
-Docker should be installed
+<b>Run tests on linux machine</b>
+Use bash comand:
+docker-compose -f docker-compose-test.yml
+
 
 
 !!! The app launh fiber server and preprocessing the same time. Api returns error while prepricessing not done. 
