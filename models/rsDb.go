@@ -3,18 +3,15 @@ package models
 import (
 	"fmt"
 	"log"
-	"os"
 	"time"
 
 	"github.com/RediSearch/redisearch-go/redisearch"
 )
 
 func RSearch() {
-	// Create a client. By default a client is schemaless
+	pool := CreateConnectionPool()
 	// unless a schema is provided when creating the index
-	c := redisearch.NewClient(fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT")), "myIndex")
-
-	// Create a schema
+	c := redisearch.NewClientFromPool(pool, "myIndex")
 	sc := redisearch.NewSchema(redisearch.DefaultOptions).
 		AddField(redisearch.NewTextField("body")).
 		AddField(redisearch.NewTextFieldOptions("title", redisearch.TextFieldOptions{Weight: 5.0, Sortable: true})).
@@ -57,6 +54,8 @@ func RSearch() {
 	if err := c.IndexOptions(redisearch.DefaultIndexingOptions, doc2); err != nil {
 		fmt.Println(docMap)
 		log.Fatal(err)
+	} else {
+		fmt.Println("indexing comleted")
 	}
 
 	// Searching with limit and sorting

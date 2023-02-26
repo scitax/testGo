@@ -12,6 +12,7 @@ func NewRouter() *fiber.App {
 	// Use middlewares for each route
 	// RespTimeMW should be first middleware to concider other middlewares performance
 	app.Use(handlers.RespTimeMW, handlers.PreprocessingMW)
+	//routes
 	app.Get("/", handlers.HwFiber)
 
 	return app

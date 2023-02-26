@@ -2,19 +2,20 @@ package admin
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"os"
 )
+
+var defaultJsonPath string = "admin/admin files/environment.json"
 
 type Rules struct {
 	Vms      []Vm      `json:"vms"`
 	Fv_rules []Fv_rule `json:"fv_rule"`
 }
 type Vm struct {
-	Vm_id string   `json:"vm_id"`
-	Name  string   `json:"name"`
-	Tags  []string `json:"tags"`
+	Vm_id string `json:"vm_id"`
+	Name  string `json:"name"`
+	Tags  string `json:"tags"`
 }
 type Fv_rule struct {
 	Fv_id      string `json:"fv_id"`
@@ -22,9 +23,12 @@ type Fv_rule struct {
 	Dest_tag   string `json:"dest_tag"`
 }
 
-func ReadJSON() (*Rules, error) {
+func ReadJSON(path string) (*Rules, error) {
+	if path == "" {
+		path = defaultJsonPath
+	}
 
-	jsonFile, err := os.Open("admin/admin files/environment.json")
+	jsonFile, err := os.Open(path)
 	defer jsonFile.Close()
 
 	if err != nil {
@@ -33,18 +37,9 @@ func ReadJSON() (*Rules, error) {
 
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
-	var users Rules
+	var rulesData Rules
 
-	json.Unmarshal(byteValue, &users)
+	json.Unmarshal(byteValue, &rulesData)
 
-	return &users, nil
-}
-
-func ReadRules() error {
-	rules, err := ReadJSON()
-	if err != nil {
-		return err
-	}
-	fmt.Println(rules.Vms[0].Tags[0])
-	return nil
+	return &rulesData, nil
 }
